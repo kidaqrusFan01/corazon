@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Home
+{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+
+
+<div class="hero-content">
+    <h1>Discover Amazing Products</h1>
+    <p>Best prices. Fast delivery. Trusted sellers.</p>
+
+    <a href="#" class="shop-btn">
+        Shop Now
+    </a>
+</div>
+
+
+</section>
+
+<section class="deals-section">
+
+
+<h2>Today's Deals</h2>
+
+<div class="deal-grid">
+
+    <div class="deal-box">
+        <h3>Electronics</h3>
+        <p>Up to 40% Off</p>
+    </div>
+
+    <div class="deal-box">
+        <h3>Fashion</h3>
+        <p>Up to 60% Off</p>
+    </div>
+
+    <div class="deal-box">
+        <h3>Gaming</h3>
+        <p>Best Offers</p>
+    </div>
+
+    <div class="deal-box">
+        <h3>Phones</h3>
+        <p>Special Discounts</p>
+    </div>
+
+</div>
+
+</section>
+
+
+
+
+
+<section class="products-section">
+
+
+<h2>Featured Products</h2>
+
+<div class="product-grid">
+
+    {% for product in products %}
+
+    <div class="product-card">
+        <a
+       href="{% url 'add_to_wishlist' product.id %}"
+       class="wishlist-icon">
+       ❤️
+    </a>
+
+    <div class="product-image">
+        <img src="{{ product.image.url }}" alt="noImage">
+    </div>
+
+    <div class="product-info">
+
+        <h3>{{ product.title|truncatechars:40 }}</h3>
+
+        <div class="stars">
+            ★★★★★
+        </div>
+
+        <div class="price">
+            N{{ product.price }}
+        </div>
+
+        <a href="{% url 'product_detail' product.id %}"
+           class="view-btn">
+            View Details
+        </a>
+
+        <button
+            class="ajax-cart-btn"
+            data-id="{{ product.id }}">
+            Add to Cart
+        </button>
+
+    </div>
+
+</div>
+
+    {% empty %}
+
+    <p>No products available.</p>
+
+    {% endfor %}
+
+</div>
+```
+
+</section>
+
+{% endblock %}

@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ product.title }}
+{% endblock %}
+
+{% block content %}
+
+<div class="product-detail-container">
+
+    <div class="product-detail-image">
+
+        {% if product.image %}
+            <img src="{{ product.image.url }}"
+                 alt="{{ product.title }}">
+        {% endif %}
+
+    </div>
+
+    <div class="product-detail-info">
+
+        <h1>{{ product.title }}</h1>
+
+        <div class="rating">
+            ★★★★★
+            <span>(125 Reviews)</span>
+        </div>
+
+       <h2 class="product-price">
+    ₦{{ product.price }}
+</h2>
+
+<p>
+    {{ product.description }}
+</p>
+
+       <div class="product-actions">
+
+    <button
+        class="ajax-cart-btn"
+        data-id="{{ product.id }}">
+        Add To Cart
+    </button>
+
+    <a
+        href="{% url 'add_to_wishlist' product.id %}"
+        class="wishlist-btn">
+        ❤️ Add to Wishlist
+    </a>
+
+</div>
+    </div>
+    <section class="related-products">
+
+    <h2>Related Products</h2>
+
+    <div class="product-grid">
+
+        {% for item in related_products %}
+
+        <div class="product-card">
+
+            {% if item.image %}
+                <img src="{{ item.image.url }}"
+                     alt="{{ item.title }}">
+            {% endif %}
+
+            <h3>{{ item.title }}</h3>
+
+            <p>₦{{ item.price }}</p>
+
+            <a href="{% url 'product_detail' item.id %}"
+               class="view-btn">
+               View Product
+            </a>
+
+        </div>
+
+        {% empty %}
+
+        <p>No related products found.</p>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ category.name }}
+{% endblock %}
+
+{% block content %}
+
+<section class="products-section">
+
+    <h2>{{ category.name }}</h2>
+
+    <div class="product-grid">
+
+        {% for product in products %}
+
+        <div class="product-card">
+
+            {% if product.image %}
+            <div class="product-image">
+                <img
+                    src="{{ product.image.url }}"
+                    alt="{{ product.title }}"
+                >
+            </div>
+            {% endif %}
+
+            <div class="product-info">
+
+                <h3>
+                    {{ product.title }}
+                </h3>
+
+                <div class="price">
+                    {{ product.price }}
+                </div>
+
+                <a
+                    href="{% url 'product_detail' product.id %}"
+                    class="view-btn"
+                >
+                    View Product
+                </a>
+
+            </div>
+
+        </div>
+
+        {% empty %}
+
+        <p>
+            No products found.
+        </p>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+{% endblock %}

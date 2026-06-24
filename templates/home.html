@@ -1,181 +1,84 @@
 {% extends 'base.html' %}
 {% load static %}
-
-{% block title %}Home{% endblock %}
+{% block title %}Corazon Marketplace - Online Shopping{% endblock %}
 
 {% block content %}
 
-<!-- HERO SLIDER -->
-
+<!-- HERO SLIDER - Amazon style banner -->
 <section class="hero-slider">
-
-
-<div class="slides">
-
-    <img src="{% static 'images/banner1.jpg' %}" class="slide active">
-
-    <img src="{% static 'images/banner2.jpg' %}" class="slide">
-
-    <img src="{% static 'images/banner3.jpg' %}" class="slide">
-
-</div>
-
-<div class="slider-overlay">
-
-    <h1>Welcome To Corazon Marketplace</h1>
-
-    <p>Discover amazing products at unbeatable prices</p>
-
-    <a href="#products" class="shop-btn">
-        Shop Now
-    </a>
-
-</div>
-
-
+    <div class="slides">
+        <img src="{% static 'images/banner1.jpg' %}" class="slide active" alt="Deal 1">
+        <img src="{% static 'images/banner2.jpg' %}" class="slide" alt="Deal 2">
+        <img src="{% static 'images/banner3.jpg' %}" class="slide" alt="Deal 3">
+    </div>
+    <div class="slider-overlay">
+        <h1>Welcome To Corazon Marketplace</h1>
+        <p>Discover amazing products at unbeatable prices</p>
+        <a href="#products" class="shop-btn">Shop Now</a>
+    </div>
 </section>
 
-<!-- CATEGORY CARDS -->
-
-<section class="categories-section">
-
-
-<div class="category-card">
-    <i class="fas fa-laptop"></i>
-    <h3>Electronics</h3>
-</div>
-
-<div class="category-card">
-    <i class="fas fa-tshirt"></i>
-    <h3>Fashion</h3>
-</div>
-
-<div class="category-card">
-    <i class="fas fa-mobile-alt"></i>
-    <h3>Phones</h3>
-</div>
-
-<div class="category-card">
-    <i class="fas fa-gamepad"></i>
-    <h3>Gaming</h3>
-</div>
-
-<div class="category-card">
-    <i class="fas fa-book"></i>
-    <h3>Books</h3>
-</div>
-
-<div class="category-card">
-    <i class="fas fa-headphones"></i>
-    <h3>Accessories</h3>
-</div>
-
-
-</section>
-
-<!-- TODAY DEALS -->
-
+<!-- TODAY'S DEALS - Amazon style 4-box grid -->
 <section class="deals-section">
-
-
-<h2>🔥 Today's Deals</h2>
-
-<div class="deals-grid">
-
-    <div class="deal-box">
-        <h3>Electronics</h3>
-        <p>Up To 40% Off</p>
+    <h2>Today's Deals</h2>
+    <div class="deals-grid">
+        <div class="deal-box">
+            <h3>Electronics</h3>
+            <p>Up To 40% Off</p>
+            <a href="{% url 'category_products' 'electronics' %}">Shop now</a>
+        </div>
+        <div class="deal-box">
+            <h3>Fashion</h3>
+            <p>Up To 60% Off</p>
+            <a href="{% url 'category_products' 'fashion' %}">Shop now</a>
+        </div>
+        <div class="deal-box">
+            <h3>Gaming</h3>
+            <p>Best Offers</p>
+            <a href="{% url 'category_products' 'gaming' %}">Shop now</a>
+        </div>
+        <div class="deal-box">
+            <h3>Phones</h3>
+            <p>Special Discounts</p>
+            <a href="{% url 'category_products' 'phones' %}">Shop now</a>
+        </div>
     </div>
-
-    <div class="deal-box">
-        <h3>Fashion</h3>
-        <p>Up To 60% Off</p>
-    </div>
-
-    <div class="deal-box">
-        <h3>Gaming</h3>
-        <p>Best Offers</p>
-    </div>
-
-    <div class="deal-box">
-        <h3>Phones</h3>
-        <p>Special Discounts</p>
-    </div>
-
-</div>
-
-
 </section>
 
-<!-- PRODUCT SECTION -->
-
+<!-- PRODUCT SECTION - Amazon cards -->
 <section id="products" class="products-section">
+    <h2>Featured Products</h2>
+    <div class="products-grid">
+        {% for product in products %}
+        <div class="product-card">
+            <a href="{% url 'add_to_wishlist' product.id %}" class="wishlist-icon">♡</a>
+            
+            <div class="product-image">
+                {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.title }}">
+                {% endif %}
+            </div>
 
+            <div class="product-info">
+                <h3>{{ product.title|truncatechars:60 }}</h3>
+                
+                <div class="stars">
+                    ★★★★☆ <span style="color:#555;font-size:12px;">(1,234)</span>
+                </div>
 
-<h2>Featured Products</h2>
+                <div class="price">₦{{ product.price }}</div>
+                <div style="font-size:12px;color:#555;">FREE delivery</div>
 
-<div class="products-grid">
-
-    {% for product in products %}
-
-    <div class="product-card">
-
-        <a href="{% url 'add_to_wishlist' product.id %}"
-           class="wishlist-icon">
-           ❤️
-        </a>
-
-        <div class="product-image">
-
-            {% if product.image %}
-            <img src="{{ product.image.url }}"
-                 alt="{{ product.title }}">
-            {% endif %}
-
+                <div class="product-actions">
+                    <a href="{% url 'product_detail' product.id %}" class="view-btn">View Details</a>
+                    <button class="ajax-cart-btn" data-id="{{ product.id }}">Add to Cart</button>
+                </div>
+            </div>
         </div>
-
-        <div class="product-info">
-
-            <h3>
-                {{ product.title|truncatechars:40 }}
-            </h3>
-
-            <div class="stars">
-                ★★★★★
-            </div>
-
-            <div class="price">
-                ₦{{ product.price }}
-            </div>
-
-            <div class="product-actions">
-
-                <a href="{% url 'product_detail' product.id %}"
-                   class="view-btn">
-                    View Details
-                </a>
-
-                <button
-                    class="ajax-cart-btn"
-                    data-id="{{ product.id }}">
-                    Add To Cart
-                </button>
-
-            </div>
-
-        </div>
-
+        {% empty %}
+        <p>No products available.</p>
+        {% endfor %}
     </div>
-
-    {% empty %}
-
-    <p>No products available.</p>
-
-    {% endfor %}
-
-</div>
-
-
 </section>
 
 {% endblock %}

@@ -1,42 +1,95 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}
-Home
-{% endblock %}
+{% block title %}Home{% endblock %}
 
 {% block content %}
 
-<section class="hero">
+<!-- HERO SLIDER -->
+
+<section class="hero-slider">
 
 
-<div class="hero-content">
-    <h1>Discover Amazing Products</h1>
-    <p>Best prices. Fast delivery. Trusted sellers.</p>
+<div class="slides">
 
-    <a href="#" class="shop-btn">
+    <img src="{% static 'images/banner1.jpg' %}" class="slide active">
+
+    <img src="{% static 'images/banner2.jpg' %}" class="slide">
+
+    <img src="{% static 'images/banner3.jpg' %}" class="slide">
+
+</div>
+
+<div class="slider-overlay">
+
+    <h1>Welcome To Corazon Marketplace</h1>
+
+    <p>Discover amazing products at unbeatable prices</p>
+
+    <a href="#products" class="shop-btn">
         Shop Now
     </a>
+
 </div>
 
 
 </section>
 
+<!-- CATEGORY CARDS -->
+
+<section class="categories-section">
+
+
+<div class="category-card">
+    <i class="fas fa-laptop"></i>
+    <h3>Electronics</h3>
+</div>
+
+<div class="category-card">
+    <i class="fas fa-tshirt"></i>
+    <h3>Fashion</h3>
+</div>
+
+<div class="category-card">
+    <i class="fas fa-mobile-alt"></i>
+    <h3>Phones</h3>
+</div>
+
+<div class="category-card">
+    <i class="fas fa-gamepad"></i>
+    <h3>Gaming</h3>
+</div>
+
+<div class="category-card">
+    <i class="fas fa-book"></i>
+    <h3>Books</h3>
+</div>
+
+<div class="category-card">
+    <i class="fas fa-headphones"></i>
+    <h3>Accessories</h3>
+</div>
+
+
+</section>
+
+<!-- TODAY DEALS -->
+
 <section class="deals-section">
 
 
-<h2>Today's Deals</h2>
+<h2>🔥 Today's Deals</h2>
 
-<div class="deal-grid">
+<div class="deals-grid">
 
     <div class="deal-box">
         <h3>Electronics</h3>
-        <p>Up to 40% Off</p>
+        <p>Up To 40% Off</p>
     </div>
 
     <div class="deal-box">
         <h3>Fashion</h3>
-        <p>Up to 60% Off</p>
+        <p>Up To 60% Off</p>
     </div>
 
     <div class="deal-box">
@@ -51,58 +104,68 @@ Home
 
 </div>
 
+
 </section>
 
+<!-- PRODUCT SECTION -->
 
-
-
-
-<section class="products-section">
+<section id="products" class="products-section">
 
 
 <h2>Featured Products</h2>
 
-<div class="product-grid">
+<div class="products-grid">
 
     {% for product in products %}
 
     <div class="product-card">
-        <a
-       href="{% url 'add_to_wishlist' product.id %}"
-       class="wishlist-icon">
-       ❤️
-    </a>
 
-    <div class="product-image">
-        <img src="{{ product.image.url }}" alt="noImage">
-    </div>
-
-    <div class="product-info">
-
-        <h3>{{ product.title|truncatechars:40 }}</h3>
-
-        <div class="stars">
-            ★★★★★
-        </div>
-
-        <div class="price">
-            N{{ product.price }}
-        </div>
-
-        <a href="{% url 'product_detail' product.id %}"
-           class="view-btn">
-            View Details
+        <a href="{% url 'add_to_wishlist' product.id %}"
+           class="wishlist-icon">
+           ❤️
         </a>
 
-        <button
-            class="ajax-cart-btn"
-            data-id="{{ product.id }}">
-            Add to Cart
-        </button>
+        <div class="product-image">
+
+            {% if product.image %}
+            <img src="{{ product.image.url }}"
+                 alt="{{ product.title }}">
+            {% endif %}
+
+        </div>
+
+        <div class="product-info">
+
+            <h3>
+                {{ product.title|truncatechars:40 }}
+            </h3>
+
+            <div class="stars">
+                ★★★★★
+            </div>
+
+            <div class="price">
+                ₦{{ product.price }}
+            </div>
+
+            <div class="product-actions">
+
+                <a href="{% url 'product_detail' product.id %}"
+                   class="view-btn">
+                    View Details
+                </a>
+
+                <button
+                    class="ajax-cart-btn"
+                    data-id="{{ product.id }}">
+                    Add To Cart
+                </button>
+
+            </div>
+
+        </div>
 
     </div>
-
-</div>
 
     {% empty %}
 
@@ -111,7 +174,7 @@ Home
     {% endfor %}
 
 </div>
-```
+
 
 </section>
 

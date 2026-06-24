@@ -67,6 +67,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
+document.addEventListener("DOMContentLoaded", function(){
+
+    const menuBtn =
+        document.getElementById("menu-toggle");
+
+    const menu =
+        document.getElementById("mobile-menu");
+
+    if(menuBtn){
+
+        menuBtn.addEventListener("click", function(){
+
+            menu.classList.toggle("show-menu");
+
+        });
+
+    }
+
+});
+
 function addToCart(name, price) {
   cart.push({ name, price });
   saveCart();
@@ -122,22 +142,26 @@ document.addEventListener("DOMContentLoaded", () => {
   renderCart();
 });
 
-const slides =
-document.querySelectorAll(".slide");
+const slides = document.querySelectorAll('.slide');
 
-let current = 0;
+let currentSlide = 0;
 
-function nextSlide(){
+if(slides.length){
 
-    slides[current].classList.remove("active");
+    setInterval(() => {
 
-    current++;
+        slides[currentSlide]
+            .classList.remove('active');
 
-    if(current >= slides.length){
-        current = 0;
-    }
+        currentSlide++;
 
-    slides[current].classList.add("active");
+        if(currentSlide >= slides.length){
+            currentSlide = 0;
+        }
+
+        slides[currentSlide]
+            .classList.add('active');
+
+    }, 4000);
+
 }
-
-setInterval(nextSlide,4000);

@@ -97,14 +97,21 @@
 </div>
 <script src="{% static 'js/app.js' %}"></script>
 <script>
-const toggle = document.querySelector('.mobile-menu-toggle');
-const nav = document.querySelector('.main-nav');
-
-if(toggle) {
-    toggle.addEventListener('click', () => {
-        nav.classList.toggle('active');
-    });
-}
+document.addEventListener('DOMContentLoaded', function() {
+    const toggle = document.getElementById('menu-toggle'); // you have id="menu-toggle"
+    const nav = document.querySelector('.category-bar'); // your categories bar
+    
+    if(toggle && nav) {
+        toggle.addEventListener('click', () => {
+            nav.classList.toggle('active');
+            // Change icon bars ↔ X
+            const icon = toggle.querySelector('i');
+            icon.classList.toggle('fa-bars');
+            icon.classList.toggle('fa-times');
+        });
+    }
+});
 </script>
+
 </body>
 </html>

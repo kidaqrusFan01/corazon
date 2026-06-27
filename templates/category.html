@@ -2,61 +2,54 @@
 {% load static %}
 
 {% block title %}
-{{ category.name }}
+{{ category.name }} | Corazon
 {% endblock %}
 
 {% block content %}
+<section class="category-container">
+    <!-- Breadcrumbs -->
+    <nav class="breadcrumb">
+        <a href="{% url 'home' %}">Home</a> &rsaquo; 
+        <span>{{ category.name }}</span>
+    </nav>
 
-<section class="products-section">
-
-    <h2>{{ category.name }}</h2>
-
-    <div class="product-grid">
-
-        {% for product in products %}
-
-        <div class="product-card">
-
-            {% if product.image %}
-            <div class="product-image">
-                <img
-                    src="{{ product.image.url }}"
-                    alt="{{ product.title }}"
-                >
-            </div>
-            {% endif %}
-
-            <div class="product-info">
-
-                <h3>
-                    {{ product.title }}
-                </h3>
-
-                <div class="price">
-                    {{ product.price }}
-                </div>
-
-                <a
-                    href="{% url 'product_detail' product.id %}"
-                    class="view-btn"
-                >
-                    View Product
-                </a>
-
-            </div>
-
-        </div>
-
-        {% empty %}
-
-        <p>
-            No products found.
+    <div class="category-header">
+        <h1>{{ category.name }}</h1>
+        <p class="results-count">
+            {% if products.count %}{{ products.count }} result{{ products.count|pluralize }}{% endif %}
         </p>
-
-        {% endfor %}
-
     </div>
 
-</section>
+    {% if products %}
+    <div class="category-grid">
+        {% for product in products %}
+        <div class="category-card">
+            <a href="{% url 'product_detail' product.id %}" class="category-link">
+                {% if product.image %}
+                <div class="product-image">
+                    <img src="{{ product.image.url }}" alt="{{ product.title }}">
+                </div>
+                {% else %}
+                <div class="product-image placeholder">
+                    <img src="{% static 'img/no-image.png' %}" alt="No image">
+                </div>
+                {% endif %}
 
+                <div class="product-info">
+                    <h3 class="category-title">{{ product.title }}</h3>
+                    <div class="category-price">₦{{ product.price|floatformat:2 }}</div>
+                </div>
+            </a>
+            <a href="{% url 'product_detail' product.id %}" class="category-btn">View Product</a>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <h2>No products found</h2>
+        <p>There are no items in {{ category.name }} yet.</p>
+        <a href="{% url 'home' %}" class="view-btn">Back to Shop</a>
+    </div>
+    {% endif %}
+</section>
 {% endblock %}

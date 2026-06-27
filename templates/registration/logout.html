@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Signed Out - Corazon{% endblock %}
+{% block content %}
+<style>
+.logout-container{max-width:400px;margin:80px auto;text-align:center;padding:40px;background:white;border:1px solid #ddd;border-radius:4px;}
+.logout-container h1{font-size:28px;margin-bottom:15px;}
+.logout-btn{display:inline-block;background:#febd69;padding:10px 25px;border-radius:3px;text-decoration:none;color:#111;margin-top:20px;}
+</style>
+
+<div class="logout-container">
+    <h1>You've been signed out</h1>
+    <p>Thanks for visiting Corazon Marketplace.</p>
+    <a href="{% url 'login' %}" class="logout-btn">Sign in again</a>
+</div>
+{% endblock %}

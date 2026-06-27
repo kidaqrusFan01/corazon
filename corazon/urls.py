@@ -13,6 +13,7 @@ urlpatterns = [
     views.add_product,
     name='add_product'
 ),
+   
 
     path(
     'wishlist/add/<int:product_id>/',
@@ -29,7 +30,7 @@ urlpatterns = [
     path(
     'category/<slug:slug>/',
     views.category_products,
-    name='category_products'
+    name='category'
 ),
 
     path(

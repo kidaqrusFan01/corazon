@@ -2,74 +2,60 @@
 {% load static %}
 
 {% block title %}
-Seller Dashboard
+Seller Dashboard | Corazon
 {% endblock %}
 
 {% block content %}
-
-<div class="dashboard-container">
-
-    <div class="dashboard-header">
-        <h1>Seller Dashboard</h1>
-
-        <a href="{% url 'add_product' %}"
-           class="add-product-btn">
-            + Add Product
-        </a>
+<div class="seller-dashboard-wrap">
+    <div class="sd-header">
+        <h1>Your Products</h1>
+        <a href="{% url 'add_product' %}" class="sd-add-btn">+ Add a product</a>
     </div>
 
-    <div class="dashboard-card">
-
-        <table class="dashboard-table">
-
+    {% if products %}
+    <div class="sd-table-card">
+        <table class="sd-table">
             <thead>
                 <tr>
+                    <th>Image</th>
                     <th>Product</th>
                     <th>Price</th>
                     <th>Stock</th>
-                    <th>Images</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
-
             <tbody>
-
-            {% for product in products %}
-
+                {% for product in products %}
                 <tr>
-
-                    <td>{{ product.title }}</td>
-                    <td>{{ product.price }}</td>
-
-                    <td>₦{{ product.stock }}</td>
-
-                    <td>{{ product.image.url }}</td>
-
-                    <td>
-
-                        <a href="{% url 'product_detail' product.id %}">
-                            View
-                        </a>
-
+                    <td class="sd-img-cell">
+                        {% if product.image %}
+                            <img src="{{ product.image.url }}" alt="{{ product.title }}">
+                        {% else %}
+                            <img src="{% static 'img/no-image.png' %}" alt="No image">
+                        {% endif %}
                     </td>
-
-                </tr>
-
-            {% empty %}
-
-                <tr>
-                    <td colspan="4">
-                        No products found.
+                    <td class="sd-title-cell">
+                        <a href="{% url 'product_detail' product.id %}">{{ product.title }}</a>
+                    </td>
+                    <td class="sd-price">₦{{ product.price|floatformat:2 }}</td>
+                    <td class="sd-stock {% if product.stock == 0 %}out{% endif %}">
+                        {{ product.stock }}
+                    </td>
+                    <td class="sd-actions">
+                        <a href="{% url 'product_detail' product.id %}" class="sd-view-btn">View</a>
+                        <!-- Add edit/delete later -->
                     </td>
                 </tr>
-
-            {% endfor %}
-
+                {% endfor %}
             </tbody>
-
         </table>
-
     </div>
-
+    {% else %}
+    <div class="sd-empty">
+        <h2>No products yet</h2>
+        <p>Start selling by adding your first product.</p>
+        <a href="{% url 'add_product' %}" class="sd-add-btn">+ Add Product</a>
+    </div>
+    {% endif %}
 </div>
-
 {% endblock %}

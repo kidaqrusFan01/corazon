@@ -2,91 +2,77 @@
 {% load static %}
 
 {% block title %}
-{{ product.title }}
+{{ product.title }} | Corazon
 {% endblock %}
 
 {% block content %}
-
-<div class="product-detail-container">
-
-    <div class="product-detail-image">
-
-        {% if product.image %}
-            <img src="{{ product.image.url }}"
-                 alt="{{ product.title }}">
-        {% endif %}
-
-    </div>
-
-    <div class="product-detail-info">
-
-        <h1>{{ product.title }}</h1>
-
-        <div class="rating">
-            ★★★★★
-            <span>(125 Reviews)</span>
-        </div>
-
-       <h2 class="product-price">
-    ₦{{ product.price }}
-</h2>
-
-<p>
-    {{ product.description }}
-</p>
-
-       <div class="product-actions">
-
-    <button
-        class="ajax-cart-btn"
-        data-id="{{ product.id }}">
-        Add To Cart
-    </button>
-
-    <a
-        href="{% url 'add_to_wishlist' product.id %}"
-        class="wishlist-btn">
-        ❤️ Add to Wishlist
-    </a>
-
-</div>
-    </div>
-    <section class="related-products">
-
-    <h2>Related Products</h2>
-
-    <div class="product-grid">
-
-        {% for item in related_products %}
-
-        <div class="product-card">
-
-            {% if item.image %}
-                <img src="{{ item.image.url }}"
-                     alt="{{ item.title }}">
+<div class="product-detail-wrap">
+    <div class="pd-container">
+        <!-- Left: Image -->
+        <div class="pd-image-box">
+            {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.title }}">
+            {% else %}
+                <img src="{% static 'img/no-image.png' %}" alt="No image">
             {% endif %}
-
-            <h3>{{ item.title }}</h3>
-
-            <p>₦{{ item.price }}</p>
-
-            <a href="{% url 'product_detail' item.id %}"
-               class="view-btn">
-               View Product
-            </a>
-
         </div>
 
-        {% empty %}
+        <!-- Right: Info -->
+        <div class="pd-info-box">
+            <div class="pd-breadcrumbs">
+                <a href="{% url 'home' %}">Home</a> &rsaquo; 
+                <a href="{% url 'category' product.category.id %}">{{ product.category.name }}</a> &rsaquo;
+                <span>{{ product.title|truncatechars:40 }}</span>
+            </div>
 
-        <p>No related products found.</p>
+            <h1 class="pd-title">{{ product.title }}</h1>
 
-        {% endfor %}
+            <div class="pd-rating">
+                <span class="stars">★★★</span>
+                <a href="#reviews">(125 Reviews)</a>
+            </div>
 
+            <div class="pd-price-box">
+                <span class="pd-price">₦{{ product.price|floatformat:2 }}</span>
+                <span class="pd-tax">Inclusive of all taxes</span>
+            </div>
+
+            <div class="pd-desc">
+                {{ product.description|linebreaks }}
+            </div>
+
+            <div class="pd-actions">
+                <button class="pd-cart-btn ajax-cart-btn" data-id="{{ product.id }}">
+                    Add to Cart
+                </button>
+                <a href="{% url 'add_to_wishlist' product.id %}" class="pd-wish-btn">
+                    ❤️ Add to Wishlist
+                </a>
+            </div>
+        </div>
     </div>
 
-</section>
-
+    <!-- Related Products -->
+    {% if related_products %}
+    <section class="pd-related">
+        <h2>Related products</h2>
+        <div class="pd-related-grid">
+            {% for item in related_products %}
+            <div class="pd-related-card">
+                <a href="{% url 'product_detail' item.id %}" class="pd-related-link">
+                    {% if item.image %}
+                        <img src="{{ item.image.url }}" alt="{{ item.title }}">
+                    {% endif %}
+                    <h3>{{ item.title }}</h3>
+                    <div class="pd-related-price">₦{{ item.price|floatformat:2 }}</div>
+                </a>
+                <a href="{% url 'product_detail' item.id %}" class="pd-related-btn">View Product</a>
+            </div>
+            {% empty %}
+            <p>No related products found.</p>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
 </div>
-
 {% endblock %}

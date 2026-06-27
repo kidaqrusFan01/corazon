@@ -174,6 +174,8 @@ def add_to_wishlist(request, product_id):
         pk=product.id
     )
 
+
+
 def ajax_add_to_cart(request, product_id):
 
     cart = request.session.get("cart", {})

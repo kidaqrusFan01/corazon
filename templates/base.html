@@ -1,117 +1,112 @@
-{% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Corazon Marketplace{% endblock %}</title>
-
+    <title>{% block title %}Corazon{% endblock %}</title>
+    {% load static %}
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
 <body>
+    <header class="amazon-header">
+        <div class="navbar-top">
+            <button class="menu-toggle" id="menuToggle">☰</button>
 
-<header class="amazon-header">
+            <div class="logo">
+                <a href="{% url 'home' %}">Corazon<span>marketplace</span></a>
+            </div>
 
-    <!-- Top Navbar - Amazon style -->
-    <div class="navbar-top">
-        <div class="logo">
-            <a href="{% url 'home' %}">
-                <span>Corazon</span>
-            </a>
+            <form method="GET" action="{% url 'search_products' %}" class="search-box">
+                <input type="text" name="q" placeholder="Search Corazon">
+                <button type="submit">🔍</button>
+            </form>
+
+            <nav class="nav-actions" id="navActions">
+                {% if user.is_authenticated %}
+                    <a href="#">
+                        <span>Hello, {{ user.username }}</span>
+                        <strong>Account</strong>
+                    </a>
+
+                    {% if user.is_staff or user.is_superuser %}
+                    <a href="{% url 'dashboard' %}">
+                        <span>Sell</span>
+                        <strong>Dashboard</strong>
+                    </a>
+                    {% endif %}
+
+                    <a href="#">
+                        <span>Your</span>
+                        <strong>Wishlist</strong>
+                    </a>
+
+                    <a href="{% url 'cart' %}" class="cart-link">
+                        <strong>Cart</strong>
+                        <span id="cart-count">{{ cart_count|default:0 }}</span>
+                    </a>
+
+                    <form method="POST" action="{% url 'logout' %}" style="display:inline;">
+                        {% csrf_token %}
+                        <a href="#" onclick="this.closest('form').submit(); return false;">
+                            <span>Sign</span>
+                            <strong>Out</strong>
+                        </a>
+                    </form>
+                {% else %}
+                    <a href="{% url 'login' %}">
+                        <span>Hello, Sign in</span>
+                        <strong>Account</strong>
+                    </a>
+                    <a href="{% url 'signup' %}">
+                        <span>New customer?</span>
+                        <strong>Start here</strong>
+                    </a>
+                    <a href="{% url 'cart' %}" class="cart-link">
+                        <strong>Cart</strong>
+                        <span id="cart-count">0</span>
+                    </a>
+                {% endif %}
+            </nav>
         </div>
 
-        <button class="menu-toggle" id="menu-toggle">
-            <i class="fas fa-bars"></i>
-        </button>
+        <!-- Category Bar -->
+        <nav class="category-bar" id="categoryBar">
+            <a href="{% url 'home' %}">All</a>
+            {% for category in categories %}
+                <a href="{% url 'category' category.id %}">{{ category.name }}</a>
+            {% endfor %}
+        </nav>
+    </header>
 
-        <form class="search-box" action="{% url 'search_products' %}" method="GET">
-            <input type="text" name="q" placeholder="Search Corazon Marketplace" required>
-            <button type="submit">
-                <i class="fas fa-search"></i>
-            </button>
-        </form>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
 
-        <div class="nav-actions" id="mobile-menu">
-            {% if user.is_authenticated %}
-                <a href="{% url 'dashboard' %}">
-                    <span>Hello, {{ user.username|capfirst }}</span>
-                    <strong>Account & Lists</strong>
-                </a>
-                <a href="{% url 'logout' %}">
-                    <span>Sign Out</span>
-                </a>
-            {% else %}
-                <a href="{% url 'login' %}">
-                    <span>Hello, Sign In</span>
-                    <strong>Account & Lists</strong>
-                </a>
+    <!-- Mobile Bottom Nav -->
+    <nav class="bottom-nav">
+        <a href="{% url 'home' %}">🏠<span>Home</span></a>
+        <a href="{% url 'cart' %}">🛒<span>Cart</span></a>
+        {% if user.is_authenticated %}
+            {% if user.is_staff or user.is_superuser %}
+            <a href="{% url 'dashboard' %}">📦<span>Sell</span></a>
             {% endif %}
-
-            <a href="#">
-                <span>Returns</span>
-                <strong>& Orders</strong>
-            </a>
-
-            <a href="{% url 'cart' %}" class="cart-link">
-                <i class="fas fa-shopping-cart"></i>
-                <span id="cart-count">{{ request.session.cart|length|default:"0" }}</span>
-            </a>
-        </div>
-    </div>
-
-    <!-- Category Bar -->
-    <nav class="category-bar">
-        <a href="#">
-            <i class="fas fa-bars"></i> All
-        </a>
-        {% for category in categories %}
-            <a href="{% url 'category_products' category.slug %}">
-                {{ category.name }}
-            </a>
-        {% endfor %}
+            <a href="#">❤️<span>Wish</span></a>
+            <a href="{% url 'logout' %}">👤<span>Out</span></a>
+        {% else %}
+            <a href="{% url 'login' %}">👤<span>Sign In</span></a>
+        {% endif %}
     </nav>
-</header>
 
-<main>
-    {% block content %}
-    {% endblock %}
-</main>
-
-<!-- Mobile Bottom Navigation -->
-<div class="bottom-nav">
-    <a href="{% url 'home' %}">
-        <i class="fas fa-home"></i>
-        <span>Home</span>
-    </a>
-    <a href="{% url 'cart' %}">
-        <i class="fas fa-shopping-cart"></i>
-        <span>Cart</span>
-    </a>
-    <a href="{% url 'dashboard' %}">
-        <i class="fas fa-user"></i>
-        <span>Account</span>
-    </a>
-</div>
-<script src="{% static 'js/app.js' %}"></script>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const toggle = document.getElementById('menu-toggle'); // you have id="menu-toggle"
-    const nav = document.querySelector('.category-bar'); // your categories bar
+    <script>
+    // Mobile menu toggle - shows nav-actions + category-bar
+    const menuToggle = document.getElementById('menuToggle');
+    const navActions = document.getElementById('navActions');
+    const categoryBar = document.getElementById('categoryBar');
     
-    if(toggle && nav) {
-        toggle.addEventListener('click', () => {
-            nav.classList.toggle('active');
-            // Change icon bars ↔ X
-            const icon = toggle.querySelector('i');
-            icon.classList.toggle('fa-bars');
-            icon.classList.toggle('fa-times');
-        });
-    }
-});
-</script>
-
+    menuToggle.addEventListener('click', () => {
+        navActions.classList.toggle('show-menu');
+        categoryBar.classList.toggle('active');
+    });
+    </script>
 </body>
 </html>

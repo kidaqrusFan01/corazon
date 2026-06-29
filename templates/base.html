@@ -73,7 +73,7 @@
         <nav class="category-bar" id="categoryBar">
             <a href="{% url 'home' %}">All</a>
             {% for category in categories %}
-                <a href="{% url 'category' category.id %}">{{ category.name }}</a>
+                <a href="{% url 'category' category.slug %}">{{ category.name }}</a>
             {% endfor %}
         </nav>
     </header>

@@ -21,7 +21,7 @@
         <div class="pd-info-box">
             <div class="pd-breadcrumbs">
                 <a href="{% url 'home' %}">Home</a> &rsaquo; 
-                <a href="{% url 'category' product.category.id %}">{{ product.category.name }}</a> &rsaquo;
+                <a href="{% url 'category' product.category.slug %}">{{ product.category.name }}</a> &rsaquo;
                 <span>{{ product.title|truncatechars:40 }}</span>
             </div>
 

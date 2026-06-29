@@ -52,6 +52,12 @@ urlpatterns = [
         name='cart'
     ),
 
+
+    path('signup/', views.signup_view, name='signup'), 
+
+
+
+
     path(
         'add-to-cart/<int:product_id>/',
         views.add_to_cart,

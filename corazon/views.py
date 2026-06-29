@@ -3,6 +3,8 @@ from django.http import JsonResponse
 from django.db.models import Q
 from .models import Product, Order, OrderItem, Category
 from django.contrib.auth.decorators import login_required
+from .forms import SignUpForm
+from django.contrib.auth import login
 
 
 def home(request):
@@ -35,6 +37,22 @@ def category_products(request, slug):
             "categories": categories
         }
     )
+
+def signup_view(request):
+    if request.user.is_authenticated:
+        return redirect('home') # already logged in
+
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user) # auto login after signup
+            return redirect('home')
+    else:
+        form = SignUpForm()
+    
+    return render(request, 'signup.html', {'form': form})
+
 
 def search_products(request):
 
